@@ -4,27 +4,6 @@
 //
 //  Created by Mac  on 30/11/2024.
 //
-/*
-var backgroundColor: Color {
-       switch self {
-       case .allClear, .clear, .negative, .percent:
-           return Color(.lightGray)
-       case .operation, .equals:
-           return .orange
-       case .digit, .decimal:
-           return .secondary
-       }
-   }
-   
-   var foregroundColor: Color {
-       switch self {
-       case .allClear, .clear, .negative, .percent:
-           return .black
-       default:
-           return .white
-       }
-   }
- */
 import SwiftUI
 import Foundation
 import CoreGraphics
@@ -61,146 +40,9 @@ private func getButtonSize() -> CGFloat {
     return (screenWidth - (spacingCount * Constants.padding)) / buttonCount
 }
 
-/*
-struct ButtonPad: View {
-    var body: some View {
-        VStack{
-            HStack(spacing: Constants.padding){
-                Button("AC") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.lightGray),
-                                foregroundColor: .black)
-                            )
-                Button("+/-") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.lightGray),
-                                foregroundColor: .black)
-                            )
-                Button("%") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.lightGray),
-                                foregroundColor: .black)
-                            )
-                Button("/") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.orange),
-                                foregroundColor: .white)
-                            )
-            }
-            HStack(spacing: Constants.padding){
-                Button("7") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("8") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("9") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("X") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.orange),
-                                foregroundColor: .white)
-                            )
-            }
-            HStack(spacing: Constants.padding){
-                Button("4") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("5") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("6") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("-") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.orange),
-                                foregroundColor: .white)
-                            )
-            }
-            HStack(spacing: Constants.padding){
-                Button("1") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("2") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("3") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("+") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.orange),
-                                foregroundColor: .white)
-                            )
-            }
-            HStack(spacing: Constants.padding){
-               
-                Button("0") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize()*2,
-                                width: getButtonSize()*2+Constants.padding,
-                                heigth: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button(",") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: .secondary,
-                                foregroundColor: .white)
-                            )
-                Button("=") { }
-                            .buttonStyle(CalculatorButtonStyle(
-                                size: getButtonSize(),
-                                backgroundColor: Color(.orange),
-                                foregroundColor: .white)
-                            )
-            }
-        }
-    }
-    
-}
-
-*/
 struct Calculator {
     
-    // ButtonType
+    // MARK: - ButtonType
     enum ButtonType: Hashable, CustomStringConvertible {
         case digit(_ digit: Digit)
         case operation(_ operation: ArithmeticOperation)
@@ -252,7 +94,7 @@ struct Calculator {
             }
         }
     }
-    // Digit
+    // MARK: -  Digit
     enum Digit: Int, CaseIterable, CustomStringConvertible {
         case zero, one, two, three, four, five, six, seven, eight, nine
         
@@ -260,7 +102,7 @@ struct Calculator {
             "\(rawValue)"
         }
     }
-    // ArithmeticOperation
+    // MARK: - ArithmeticOperation
     enum ArithmeticOperation: CaseIterable, CustomStringConvertible {
         case addition, subtraction, multiplication, division
         
@@ -277,7 +119,7 @@ struct Calculator {
             }
         }
     }
-    // Calculator
+    // MARK: - Calculator
     private struct ArithmeticExpression: Equatable {
             var number: Decimal
             var operation: ArithmeticOperation
@@ -467,19 +309,11 @@ struct CalculatorView: View {
     @State var latestDisplayText: String = "0"
     @State var latestDisplayTextCalc: Float = 0
     @State var latestOeration: String = ""
-    
     @State private var calculator = Calculator()  // Initialize calculator instance here
 
-    /*
-    func calcul (operation){
-        if operation == "+"
-            self.latestDisplayTextCalc = self.latestDisplayTextCalc
-    }
-    */
     func clickNumber (digit: String) {
         if self._displayText + digit == "0" + digit {
             self._displayText = digit
-            let oparation = self.latestOeration == "X" ? "*" : self.latestOeration
             self.latestDisplayText = self.latestOeration + digit
            
             self.latestOeration = ""
@@ -536,7 +370,6 @@ struct CalculatorView: View {
                 .font(.system(size: 77, weight: .light))
                 .lineLimit(2)
                 //.minimumScaleFactor(0.3)
-            // ButtonPad()
             VStack{
                 HStack(spacing: Constants.padding){
                     Button("AC") {
